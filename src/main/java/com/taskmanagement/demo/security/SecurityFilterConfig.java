@@ -23,7 +23,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityFilterConfig {
-    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**"};
+    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**","/actuator/**"};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 

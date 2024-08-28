@@ -34,18 +34,17 @@ public class KafkaController {
     }
 
 
-    @GetMapping("/hello")
-    public String hello() throws InterruptedException {
+    //@GetMapping("/hello")
+    /*public String hello() throws InterruptedException {
         countDownLatch1 = new CountDownLatch(messagePerRequest);
-        IntStream.range(0,countDownLatch1)
-                .forEach(i->this.template.send(topicName, String.valueOf(i)),
+        IntStream.range(0,countDownLatch1).forEach(i->this.template.send(topicName, String.valueOf(i)),
                         new PracticalAdvice("A Practical Advice", i));
         countDownLatch1.await(60, TimeUnit.SECONDS);
         logger.info("All message received");
         return "hello kafka";
-    }
+    }*/
 
-    @KafkaListener(topics = "advice-topic",clientIdPrefix = "json",
+   /* @KafkaListener(topics = "advice-topic",clientIdPrefix = "json",
             containerFactory = "kafkaListenerContainerFactory",topicPartitions = {@TopicPartition(topic = "",
     partitions = {"2"},partitionOffsets = {@PartitionOffset(partition = "2",initialOffset = "3")})})
     public void listenAsObject(ConsumerRecord<String, PracticalAdvice> consumerRecord,
@@ -62,7 +61,7 @@ public class KafkaController {
         logger.info("Logger 2 [String] received key {}: Type [{}] | Payload: {} | Record: {}", cr.key(),
                 typeIdHeader(cr.headers()), payload, cr.toString());
         latch.countDown();
-    }
+    }*/
 
 
 

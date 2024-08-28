@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,15 +21,14 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Configuration
+@EnableKafka
 public class KafkaConfigPublisher {
 
     @Autowired
     private KafkaProperties kafkaProperties;
 
-    @Autowired
-    private KafkaTemplate<String, Object> template;
 
-
+    @Bean
     public Map<String, Object> producerConfig(){
         Map<String,Object> mp = new HashMap<>();
         mp.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -36,21 +36,7 @@ public class KafkaConfigPublisher {
         return mp;
     }
 
-    @Bean
-    public ProducerFactory<String, Object> producerFactory(){
-        return new DefaultKafkaProducerFactory<>(producerConfig());
-    }
-
-    public KafkaTemplate<String, Object> kafkaTemplate(){
-        return new KafkaTemplate<>(producerFactory());
-    }
-
-    @Bean
-    public NewTopic createTopic(){
-        return TopicBuilder.name("Java-Topic1").partitions(2).replicas(2).build();
-    }
-
-    @Bean
+    /*@Bean
     public void sendMessageToTopic(String message){
         CompletableFuture<SendResult<String, Object>> send = template.send("java-topic", message);
         send.whenComplete((result,ex)->{
@@ -61,9 +47,24 @@ public class KafkaConfigPublisher {
                 System.out.println("Unable to send the message=[ "+message+" due to=["+ex.getMessage()+" ]");
             }
         });
+    }*/
+
+    @Bean
+    public ProducerFactory<String, Object> producerFactory(){
+        return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
+    public KafkaTemplate<String, Object> kafkaTemplate(){
+        return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public NewTopic createTopic(){
+        return TopicBuilder.name("Java-Topic1").partitions(2).replicas(2).build();
+    }
+
+    /*@Bean
     public void sendEventToTopic(TaskDto customer){
         CompletableFuture<SendResult<String, Object>> send = template.send("java-topic", customer);
         send.whenComplete((result,ex)->{
@@ -74,5 +75,5 @@ public class KafkaConfigPublisher {
                 System.out.println("Unable to send the message=[ "+customer+" due to=["+ex.getMessage()+" ]");
             }
         });
-    }
+    }*/
 }
